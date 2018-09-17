@@ -1,6 +1,8 @@
 # emoji-downloader
 
-Do you ever thought: "Oh, this instance have nice emoji's, I want them."? Then just use this script to download them.
+Do you ever thought: "Oh, this instance have nice emoji's, I want them too."? Then just use this script to download them.
+
+Inspired by [emoji-stealer](https://github.com/mirro-chan/emoji-stealer)
 
 ## Dependencies
 
