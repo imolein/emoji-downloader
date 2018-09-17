@@ -14,8 +14,16 @@ local lfs = require('lfs')
 local emoji_downloader = {}
 
 
+function emoji_downloader._show_help()
+  io.write('Use the script like this:\n' ..
+    '  emoji_downloader.lua "https://example.com"\n' ..
+    'or in verbose mode:\n' ..
+    '  emoji-downloader.lua -v "https://example.com"\n\n')
+  os.exit(1)
+end
+
 -- checks if file exists
-local function exists(file)
+function emoji_downloader._exists(file)
   local ok, err, code = os.rename(file, file)
 
   if not ok then
@@ -25,6 +33,11 @@ local function exists(file)
   end
 
   return ok, err
+end
+
+-- returns the url if valid, if not it return nil
+function emoji_downloader._validate_url(url)
+  return url:match('^https?://[%w%.]+%w+/?$')
 end
 
 -- downloads and saves the emoji
@@ -46,7 +59,7 @@ function emoji_downloader.main(opts)
   local url = assert((opts.url), 'URL needed!')
   local d_folder = opts.dest or './download/'
   local ce_path = opts.ce_path or '/api/v1/custom_emojis'
-  if not exists(d_folder) then lfs.mkdir(d_folder) end
+  if not emoji_downloader._exists(d_folder) then lfs.mkdir(d_folder) end
 
   local emoji_list = assert(requests.get(url .. ce_path).json())
   
@@ -64,8 +77,6 @@ function emoji_downloader.main(opts)
   
   io.write(('Look into folder %s to find the downloaded emoji\'s!\n'):format(d_folder))
 end
-
-
 
 
 setmetatable(emoji_downloader, {
