@@ -12,7 +12,7 @@ local requests = require('requests')
 
 local emoji_downloader = {}
 
-
+-- prints the help message
 local function show_help()
   io.write('emoji-downloader: emoji-downloader [OPTIONS] URL\n' ..
     'Download custom emoji\'s from a Pleroma or Mastodon instance.\n\n' ..
@@ -38,6 +38,8 @@ local function exists(file)
   return ok, err
 end
 
+-- recursive folder creation function
+-- TODO: Replace by lpath or own function
 local function mkdir(path)
   local ok = os.execute('mkdir -p ' .. path)
 
@@ -49,6 +51,7 @@ local function validate_fqdn(url)
   return url:match('^https?://[%w%.]+%w+/?$')
 end
 
+-- check and format the options
 local function finalize_opts(opts)
   assert(validate_fqdn(opts.url), 'URL format incorrect!')
   opts.url = ( opts.url:sub(-1) == '/' and opts.url:sub(1, -2) ) or opts.url
@@ -58,6 +61,7 @@ local function finalize_opts(opts)
   return opts
 end
 
+-- parse given arguments
 local function parse_args(args)
   local opts = {
     verbose = false,
@@ -103,33 +107,36 @@ function emoji_downloader.main(args)
 
   if not exists(opts.dest) then assert(mkdir(opts.dest), 'Couldn\'t create directory!') end
 
+  -- get the list of emoji's
   local emoji_list = assert(requests.get(opts.url .. opts.ce_api_path).json())
 
+  -- iterate over the list and download the files to the given download destination
   for _, e in ipairs(emoji_list) do
     local filename = e.shortcode .. e.url:match('https?://.+/.*(%.%w+)[%?%d]*$')
     local success, err = download_file(e.url, filename, opts.dest)
 
-    if not success then
-      io.write(('The following error occured during the download of %s: %s\n'):format(e.shortcode, err))
-    else
+    if success then
       if opts.verbose then
         io.write(('Downloaded emoji: %s\n'):format(e.shortcode))
       end
-      
+
       if opts.create_emoji_txt then
         local file = io.open(opts.dest .. 'emoji.txt', 'a')
+
         if file then
           file:write(('%s, /emoji/%s\n'):format(e.shortcode, filename))
           file:close()
         end
       end
+    else
+      io.write(('The following error occured during the download of %s: %s\n'):format(e.shortcode, err))
     end
   end
-  
+
   io.write(('Look into folder %s to find the downloaded emoji\'s!\n'):format(opts.dest))
 end
 
-
+-- if table is called directly, with .main(), the redirect the call to .main()
 setmetatable(emoji_downloader, {
     __call = function(_, opts)
       return emoji_downloader.main(opts)
