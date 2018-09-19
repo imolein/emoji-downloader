@@ -19,6 +19,7 @@ local function show_help()
     'Useable options:\n' ..
     '  -d FOLDER      Define the folder where the downloaded emoji\'s are stored (default: /tmp)\n' ..
     '  -ap API PATH   Define the custom emoji api path (defaul: /api/v1/custom_emojis)\n' ..
+    '  -et            Generates the emoji.txt which is needed for Pleroma' ..
     '  -h             Shows this message\n' ..
     '  -v             Verbose - shows a message per downloaded emoji\n\n')
   os.exit(1)
@@ -60,6 +61,7 @@ end
 local function parse_args(args)
   local opts = {
     verbose = false,
+    create_emoji_txt = false,
     url = args[#args],
     ce_api_path = '/api/v1/custom_emojis',
     dest = '/tmp/'
@@ -72,6 +74,8 @@ local function parse_args(args)
       opts.dest = args[i + 1]
     elseif a == '-v' then
       opts.verbose = true
+    elseif a == '-et' then
+      opts.create_emoji_txt = true
     elseif a == '-ap' then
       opts.ce_api_path = args[i + 1]
     end
@@ -81,13 +85,12 @@ local function parse_args(args)
 end
 
 -- downloads and saves the emoji
-local function download_file(url, shortcode, folder)
-  local file_name = shortcode .. url:match('https?://.+/.*(%.%w+)[%?%d]*$')
+local function download_file(url, filename, folder)
   local resp, err = requests.get(url)
 
   if not resp then return nil, err end
 
-  local file = io.open(folder ..'/' .. file_name, 'w')
+  local file = io.open(folder .. filename, 'w')
   file:write(resp.text)
   file:close()
 
@@ -103,13 +106,22 @@ function emoji_downloader.main(args)
   local emoji_list = assert(requests.get(opts.url .. opts.ce_api_path).json())
 
   for _, e in ipairs(emoji_list) do
-    local success, err = download_file(e.url, e.shortcode, opts.dest)
+    local filename = e.shortcode .. e.url:match('https?://.+/.*(%.%w+)[%?%d]*$')
+    local success, err = download_file(e.url, filename, opts.dest)
 
     if not success then
       io.write(('The following error occured during the download of %s: %s\n'):format(e.shortcode, err))
     else
       if opts.verbose then
         io.write(('Downloaded emoji: %s\n'):format(e.shortcode))
+      end
+      
+      if opts.create_emoji_txt then
+        local file = io.open(opts.dest .. 'emoji.txt', 'a')
+        if file then
+          file:write(('%s, /emoji/%s\n'):format(e.shortcode, filename))
+          file:close()
+        end
       end
     end
   end
