@@ -4,11 +4,16 @@ Do you ever thought: "Oh, this instance have nice emoji's, I want them too."? Th
 
 Inspired by [emoji-stealer](https://github.com/mirro-chan/emoji-stealer)
 
+**Note:** I'm still learning, so if you find weird stuff in my code, please inform me about it and/or tell me how I can inprove it. I'm happy about any input :)
+
 ## Dependencies
 
 * lua (>=5.1)
 * [lua-requests](https://github.com/JakobGreen/lua-requests)
-* [luafilesystem](https://github.com/keplerproject/luafilesystem)
+
+**Note:** I removed the dependency [luafilesystem](https://github.com/keplerproject/luafilesystem) for because I only used the **lfs.mkdir()** function from it, which lacks an option for recursive folder creation. First I thought to use another library, called [lpath](https://github.com/starwing/lpath),
+which has a **makedirs()** function to create folders recursive, but it seems like the library is missing functions depending on the operation system, like I issued here: https://github.com/starwing/lpath/issues/9  
+So I use **os.execute('mkdir -p' .. path)** now, to create the folder, but this **only work with Linux**. Maybe I get a good answer to my issue at **lpath** or I'll write a custom function to use **lfs.mkdir()** again in the future.
 
 ## Install
 
@@ -22,34 +27,29 @@ But you can also clone this git, install the dependencies listed above using [lu
 
 ```
 luarocks install lua-requests
-luarocks instlal luafilesystem
 ```
 
 # Usage
 
-If installed directly with **luarocks**:
+If installed directly with **luarocks** use it like this:
 
 ```
-emoji-downloader https://example.com
+emoji-downloader: emoji-downloader [OPTIONS] URL
+Download custom emoji's from a Pleroma or Mastodon instance.
+
+Useable options:
+  -d FOLDER      Define the folder where the downloaded emoji's are stored (default: /tmp)
+  -ap API PATH   Define the custom emoji api path (defaul: /api/v1/custom_emojis)
+  -h             Shows this message
+  -v             Verbose - shows a message per downloaded emoji
 ```
 
-or if you want a message für each downloade emoji:
-
-```
-emoji-downloader -v https://example.com
-```
-
-If you cloned the repo, just use it like this:
+If you cloned this repository and installed only the dependencies with luarocks, you can use it the same way as described above, but with .lua file extension at the end:
 
 ```
 lua emoji-downloader.lua "https://example.com"
 ```
 
-or
-
-```
-lua emoji-downloader.lua -v "https://example.com"
-```
 
 ## Works with
 
@@ -58,5 +58,4 @@ lua emoji-downloader.lua -v "https://example.com"
 
 ## TODO
 
-* Configurable download folder via -d argument
-* Clean this ugly code up
+* use lpath or write custom mkdir function for recursive folder creation
