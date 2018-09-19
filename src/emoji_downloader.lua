@@ -19,7 +19,7 @@ local function show_help()
     'Useable options:\n' ..
     '  -d FOLDER      Define the folder where the downloaded emoji\'s are stored (default: /tmp)\n' ..
     '  -ap API PATH   Define the custom emoji api path (defaul: /api/v1/custom_emojis)\n' ..
-    '  -et            Generates the emoji.txt which is needed for Pleroma' ..
+    '  -et            Generates the emoji.txt which is needed for Pleroma\n' ..
     '  -h             Shows this message\n' ..
     '  -v             Verbose - shows a message per downloaded emoji\n\n')
   os.exit(1)

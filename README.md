@@ -40,8 +40,10 @@ Download custom emoji's from a Pleroma or Mastodon instance.
 Useable options:
   -d FOLDER      Define the folder where the downloaded emoji's are stored (default: /tmp)
   -ap API PATH   Define the custom emoji api path (defaul: /api/v1/custom_emojis)
+  -et            Generates the emoji.txt which is needed for Pleroma
   -h             Shows this message
   -v             Verbose - shows a message per downloaded emoji
+
 ```
 
 If you cloned this repository and installed only the dependencies with luarocks, you can use it the same way as described above, but with .lua file extension at the end:
