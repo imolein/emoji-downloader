@@ -9,21 +9,23 @@
 -- for more details.
 
 local requests = require('requests')
-local lfs = require('lfs')
 
 local emoji_downloader = {}
 
 
-function emoji_downloader._show_help()
-  io.write('Use the script like this:\n' ..
-    '  emoji_downloader.lua "https://example.com"\n' ..
-    'or in verbose mode:\n' ..
-    '  emoji-downloader.lua -v "https://example.com"\n\n')
+local function show_help()
+  io.write('emoji-downloader: emoji-downloader [OPTIONS] URL\n' ..
+    'Download custom emoji\'s from a Pleroma or Mastodon instance.\n\n' ..
+    'Useable options:\n' ..
+    '  -d FOLDER      Define the folder where the downloaded emoji\'s are stored (default: /tmp)\n' ..
+    '  -ap API PATH   Define the custom emoji api path (defaul: /api/v1/custom_emojis)\n' ..
+    '  -h             Shows this message\n' ..
+    '  -v             Verbose - shows a message per downloaded emoji\n\n')
   os.exit(1)
 end
 
 -- checks if file exists
-function emoji_downloader._exists(file)
+local function exists(file)
   local ok, err, code = os.rename(file, file)
 
   if not ok then
@@ -35,9 +37,47 @@ function emoji_downloader._exists(file)
   return ok, err
 end
 
+local function mkdir(path)
+  local ok = os.execute('mkdir -p ' .. path)
+
+  return ok
+end
+
 -- returns the url if valid, if not it return nil
-function emoji_downloader._validate_url(url)
+local function validate_fqdn(url)
   return url:match('^https?://[%w%.]+%w+/?$')
+end
+
+local function finalize_opts(opts)
+  assert(validate_fqdn(opts.url), 'URL format incorrect!')
+  opts.url = ( opts.url:sub(-1) == '/' and opts.url:sub(1, -2) ) or opts.url
+  opts.dest = (( opts.dest:sub(-1) ~= '/' and opts.dest .. '/' ) or opts.dest ) ..
+    opts.url:match('^https?://([%w%.]+%w+)/?$') .. '/'
+
+  return opts
+end
+
+local function parse_args(args)
+  local opts = {
+    verbose = false,
+    url = args[#args],
+    ce_api_path = '/api/v1/custom_emojis',
+    dest = '/tmp/'
+  }
+
+  for i, a in ipairs(args) do
+    if a == '-h' then
+      show_help()
+    elseif a == '-d' then
+      opts.dest = args[i + 1]
+    elseif a == '-v' then
+      opts.verbose = true
+    elseif a == '-ap' then
+      opts.ce_api_path = args[i + 1]
+    end
+  end
+
+  return finalize_opts(opts)
 end
 
 -- downloads and saves the emoji
@@ -46,26 +86,25 @@ local function download_file(url, shortcode, folder)
   local resp, err = requests.get(url)
 
   if not resp then return nil, err end
-  
+
   local file = io.open(folder ..'/' .. file_name, 'w')
   file:write(resp.text)
   file:close()
-  
+
   return true  
 end
 
 -- main function
-function emoji_downloader.main(opts)
-  local url = assert((opts.url), 'URL needed!')
-  local d_folder = opts.dest or './download/'
-  local ce_path = opts.ce_path or '/api/v1/custom_emojis'
-  if not emoji_downloader._exists(d_folder) then lfs.mkdir(d_folder) end
+function emoji_downloader.main(args)
+  local opts = parse_args(args)
 
-  local emoji_list = assert(requests.get(url .. ce_path).json())
-  
+  if not exists(opts.dest) then assert(mkdir(opts.dest), 'Couldn\'t create directory!') end
+
+  local emoji_list = assert(requests.get(opts.url .. opts.ce_api_path).json())
+
   for _, e in ipairs(emoji_list) do
-    local success, err = download_file(e.url, e.shortcode, d_folder)
-    
+    local success, err = download_file(e.url, e.shortcode, opts.dest)
+
     if not success then
       io.write(('The following error occured during the download of %s: %s\n'):format(e.shortcode, err))
     else
@@ -75,7 +114,7 @@ function emoji_downloader.main(opts)
     end
   end
   
-  io.write(('Look into folder %s to find the downloaded emoji\'s!\n'):format(d_folder))
+  io.write(('Look into folder %s to find the downloaded emoji\'s!\n'):format(opts.dest))
 end
 
 

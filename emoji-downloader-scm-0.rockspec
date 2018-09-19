@@ -16,8 +16,7 @@ description = {
 }
 dependencies = {
   'lua >= 5.1',
-  'lua-requests',
-  'luafilesystem'
+  'lua-requests'
 }
 
 build = {
