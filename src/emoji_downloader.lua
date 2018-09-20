@@ -94,7 +94,7 @@ local function download_file(url, filename, folder)
 
   if not resp then return nil, err end
 
-  local file = io.open(folder .. filename, 'w')
+  local file = io.open(folder .. filename, 'wb')
   file:write(resp.text)
   file:close()
 
