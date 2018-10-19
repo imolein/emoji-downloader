@@ -9,6 +9,8 @@
 -- for more details.
 
 local requests = require('requests')
+local exists = require('path.fs').exists
+local mkdir = require('path.fs').makedirs
 
 local emoji_downloader = {}
 
@@ -23,27 +25,6 @@ local function show_help()
     '  -h             Shows this message\n' ..
     '  -v             Verbose - shows a message per downloaded emoji\n\n')
   os.exit(1)
-end
-
--- checks if file exists
-local function exists(file)
-  local ok, err, code = os.rename(file, file)
-
-  if not ok then
-    if code == 13 then
-      return true
-    end
-  end
-
-  return ok, err
-end
-
--- recursive folder creation function
--- TODO: Replace by lpath or own function
-local function mkdir(path)
-  local ok = os.execute('mkdir -p ' .. path)
-
-  return ok
 end
 
 -- returns the url if valid, if not it return nil

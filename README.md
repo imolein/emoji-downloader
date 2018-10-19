@@ -10,10 +10,7 @@ Inspired by [emoji-stealer](https://github.com/mirro-chan/emoji-stealer)
 
 * lua (>=5.1)
 * [lua-requests](https://github.com/JakobGreen/lua-requests)
-
-**Note:** I removed the dependency [luafilesystem](https://github.com/keplerproject/luafilesystem) for because I only used the **lfs.mkdir()** function from it, which lacks an option for recursive folder creation. First I thought to use another library, called [lpath](https://github.com/starwing/lpath),
-which has a **makedirs()** function to create folders recursive, but it seems like the library is missing functions depending on the operation system, like I issued here: https://github.com/starwing/lpath/issues/9  
-So I use **os.execute('mkdir -p' .. path)** now, to create the folder, but this **only work with Linux**. Maybe I get a good answer to my issue at **lpath** or I'll write a custom function to use **lfs.mkdir()** again in the future.
+* [lpath](https://github.com/starwing/lpath)
 
 ## Install
 
