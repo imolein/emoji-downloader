@@ -16,7 +16,8 @@ description = {
 }
 dependencies = {
   'lua >= 5.1',
-  'lua-requests'
+  'lua-requests',
+  'lpath'
 }
 
 build = {
