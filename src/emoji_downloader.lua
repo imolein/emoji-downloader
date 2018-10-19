@@ -44,6 +44,8 @@ end
 
 -- parse given arguments
 local function parse_args(args)
+  if #args == 0 then show_help() end
+
   local opts = {
     verbose = false,
     create_emoji_txt = false,
