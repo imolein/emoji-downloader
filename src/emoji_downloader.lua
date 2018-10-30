@@ -107,7 +107,7 @@ function emoji_downloader.main(args)
         local file = io.open(opts.dest .. 'emoji.txt', 'a')
 
         if file then
-          file:write(('%s, /emoji/%s\n'):format(e.shortcode, filename))
+          file:write(('%s, /emoji/custom/%s\n'):format(e.shortcode, filename))
           file:close()
         end
       end
