@@ -54,7 +54,3 @@ lua emoji-downloader.lua "https://example.com"
 
 * [Pleroma](https://pleroma.social)
 * [Mastodon](https://joinmastodon.org)
-
-## TODO
-
-* use lpath or write custom mkdir function for recursive folder creation
