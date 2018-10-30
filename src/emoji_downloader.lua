@@ -119,12 +119,4 @@ function emoji_downloader.main(args)
   io.write(('Look into folder %s to find the downloaded emoji\'s!\n'):format(opts.dest))
 end
 
--- if table is called directly, with .main(), the redirect the call to .main()
-setmetatable(emoji_downloader, {
-    __call = function(_, opts)
-      return emoji_downloader.main(opts)
-    end
-  }
-)
-
-return emoji_downloader
+return emoji_downloader.main
