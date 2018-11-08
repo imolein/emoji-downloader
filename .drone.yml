@@ -11,6 +11,7 @@ pipeline:
       - apk add git
       - luarocks install lua-requests
       - luarocks install lpath
+      - luarocks install cjson 2.1.0-1
       - luarocks install https://raw.githubusercontent.com/siffiejoe/lua-amalg/master/amalg-scm-0.rockspec
       - mkdir build
       - lua -lamalg emoji-downloader.lua
