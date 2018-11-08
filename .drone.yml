@@ -9,6 +9,8 @@ pipeline:
     image: imo/luarocks5.3:latest
     commands:
       - apk add git
+      - luarocks install lua-requests
+      - luarocks install lpath
       - luarocks install https://raw.githubusercontent.com/siffiejoe/lua-amalg/master/amalg-scm-0.rockspec
       - mkdir build
       - lua -lamalg emoji-downloader.lua
