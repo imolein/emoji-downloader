@@ -1,0 +1,30 @@
+pipeline:
+  lint:
+    image: imo/luarocks5.3:latest
+    commands:
+      - luarocks install luacheck
+      - luacheck src/
+
+  build:
+    image: imo/luarocks5.3:latest
+    commands:
+      - luarocks install https://raw.githubusercontent.com/siffiejoe/lua-amalg/master/amalg-scm-0.rockspec
+      - mkdir build
+      - lua -lamalg emoji-downloader.lua
+      - amalg.lua -o build/emoji-downloader -s emoji-downloader.lua -c -x
+    when:
+      status: success
+      event: tag
+
+  release:
+    image: plugins/gitea-release
+    base_url: https://git.kokolor.es
+    secrets: [ gitea_token ]
+    files:
+      - build/emoji-downloader
+    checksum:
+      - sha1
+      - sh256
+    when:
+      status: success
+      event: tag
