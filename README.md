@@ -26,7 +26,11 @@ But you can also clone this git, install the dependencies listed above using [lu
 luarocks install lua-requests
 ```
 
-# Usage
+### Using standalone version
+
+I created a standalone version of the script, using [amalg](https://github.com/siffiejoe/lua-amalg), where all used modules packed into one file. So you only need the lua5.3 interpreter to run the script. You can find it under [Releases](https://git.kokolor.es/imo/emoji-downloader/releases).
+
+## Usage
 
 If installed directly with **luarocks** use it like this:
 
