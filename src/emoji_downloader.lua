@@ -24,7 +24,7 @@ local function show_help()
     '  -et            Generates the emoji.txt which is needed for Pleroma\n' ..
     '  -h             Shows this message\n' ..
     '  -v             Verbose - shows a message per downloaded emoji\n\n')
-  os.exit(1)
+  os.exit(0)
 end
 
 -- returns the url if valid, if not it return nil
