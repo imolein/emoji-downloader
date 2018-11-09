@@ -1,3 +1,7 @@
+workspace:
+  base: /lua
+  path: src/git.kokolor.es/imo/emoji-downloader
+
 pipeline:
   lint:
     image: imo/luarocks5.3:latest
@@ -8,14 +12,16 @@ pipeline:
   build:
     image: imo/luarocks5.3:latest
     commands:
-      - apk add git
+      - apk add git gzip
       - luarocks install lua-cjson 2.1.0-1
       - luarocks install lua-requests
       - luarocks install lpath
+      - luarocks install emoji-downloader-scm-0.rockspec
       - luarocks install https://raw.githubusercontent.com/siffiejoe/lua-amalg/master/amalg-scm-0.rockspec
       - mkdir build
       - lua -lamalg emoji-downloader.lua
       - amalg.lua -o build/emoji-downloader -s emoji-downloader.lua -c -x
+      - gzip build/emoji-downloader
     when:
       status: success
       event: tag
@@ -25,10 +31,11 @@ pipeline:
     base_url: https://git.kokolor.es
     secrets: [ gitea_token ]
     files:
-      - build/emoji-downloader
+      - build/emoji-downloader.gz
     checksum:
+      - md5
       - sha1
-      - sh256
+      - sha256
     when:
       status: success
       event: tag
