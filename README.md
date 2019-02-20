@@ -9,38 +9,59 @@ Inspired by [emoji-stealer](https://github.com/mirro-chan/emoji-stealer)
 ## Dependencies
 
 * lua (>=5.1)
-* [lua-requests](https://github.com/JakobGreen/lua-requests)
 * [lpath](https://github.com/starwing/lpath)
+* [copas](https://github.com/keplerproject/copas)
+* [luasec](https://github.com/brunoos/luasec)
+* [lua-rapidjson](https://github.com/xpol/lua-rapidjson)
+* [argparse](https://github.com/mpeterv/argparse)
+
+"Uhhh, why so much more dependencies?" you might think, so let me explain: The previous version depended on [lua-requests](https://github.com/JakobGreen/lua-requests), which has 5 dependencies on it's own, of which two were not even needed for this script. So we're at the same dependency level as before, but this time all dependencies are used. I could remove the argparse dependenciy and write my own short version, but...laziness. ;)
 
 ## Install
 
-The easiest way to install this script is to install it directly with [luarocks](https://luarocks.org/#quick-start) like this:
+### Method one
+
+* Download and install using the rockspec directly from the repository: `sudo luarocks install https://git.kokolor.es/imo/emoji-downloader/raw/branch/master/emoji-downloader-1.0-0.rockspec`
+* The script should be installed in `/usr/local/bin/`, so you can use it like this: `emoji-downloader domain.tld`
+* You can also use the `--local` option, if you don't want to install it global. If you do so, the script is install in `~/.luarocks/` and you have to use the full path to use it
+
+### Method two
+
+* Clone this git
+* Change into the cloned folder
+* Install dependencies:
 
 ```
-luarocks install https://raw.githubusercontent.com/imolein/emoji-downloader/master/emoji-downloader-scm-0.rockspec
+luarocks init
+luarocks init --reset
+luarocks build --only-deps
 ```
 
-But you can also clone this git, install the dependencies listed above using [luarocks](https://luarocks.org/#quick-start) and run the script directly.
-
-```
-luarocks install lua-requests
-```
+* After the installation is complete you can run it like this: `./lua emoji-downloader.lua domain.tld`
 
 ## Usage
 
 If installed directly with **luarocks** use it like this:
 
 ```
-emoji-downloader: emoji-downloader [OPTIONS] URL
-Download custom emoji's from a Pleroma or Mastodon instance.
+Usage: emoji-downloader [-a <apipath>] [-c <concurrent>] [-d <dir>]
+       [-v] [-h] <url>
 
-Useable options:
-  -d FOLDER      Define the folder where the downloaded emoji's are stored (default: /tmp)
-  -ap API PATH   Define the custom emoji api path (defaul: /api/v1/custom_emojis)
-  -et            Generates the emoji.txt which is needed for Pleroma
-  -h             Shows this message
-  -v             Verbose - shows a message per downloaded emoji
+Download emojis from mastodon or pleroma instances
 
+Arguments:
+   url                   The URL of the instance, from where you want to download the emoji's
+
+Options:
+          -a <apipath>,  Define the custom emoji api path (default: /api/v1/custom_emojis)
+   --apipath <apipath>
+             -c <concurrent>,
+   --concurrent <concurrent>
+                         Concurrent downloads
+      -d <dir>,          Define the directory where the downloaded emoji's are stored (default: /tmp/)
+   --dir <dir>
+   -v, --verbose         Shows a message per downloaded emoji
+   -h, --help            Show this help message and exit.
 ```
 
 If you cloned this repository and installed only the dependencies with luarocks, you can use it the same way as described above, but with .lua file extension at the end:
@@ -49,6 +70,17 @@ If you cloned this repository and installed only the dependencies with luarocks,
 lua emoji-downloader.lua "https://example.com"
 ```
 
+## Changelog
+
+### 1.0-0 (2019-02-20)
+
+* reworte most of the stuff
+* concurrent download of emoji's (default 5 at once)
+* Changed license from WTFPL to Unlicense
+
+### scm-0 (2018-10-19)
+
+* first version
 
 ## Works with
 

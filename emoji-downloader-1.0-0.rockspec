@@ -1,8 +1,9 @@
+rockspec_format = '3.0'
 package = 'emoji-downloader'
-version = 'scm-0'
+version = '1.0-0'
 source = {
   url = "git://github.com/imolein/emoji-downloader",
-  branch = "master"
+  tag = "v1.0-0"
 }
 description = {
   summary = 'Download Pleroma or Mastodon custom emojis',
@@ -11,20 +12,21 @@ description = {
     I want them too."? Then just use this script to download
     them.
   ]],
-  homepage = 'http://olivinelabs.com/busted/',
-  license = 'WTPFL <http://www.wtfpl.net/>'
+  homepage = 'https://git.kokolor.es/imo/emoji-downloader',
+  license = 'Unlicense'
 }
 dependencies = {
-  'lua >= 5.1',
-  'lua-requests',
-  'lpath'
+  'lua >= 5.3',
+  'lpath',
+  'copas',
+  'rapidjson',
+  'argparse',
+  'luasocket',
+  'luasec'
 }
 
 build = {
-  type = 'builtin',
-  modules = {
-    ['emoji_downloader'] = 'src/emoji_downloader.lua'
-  },
+  type = 'none',
   install = {
     bin = {
       ['emoji-downloader'] = 'emoji-downloader.lua'
