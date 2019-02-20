@@ -12,7 +12,7 @@ Inspired by [emoji-stealer](https://github.com/mirro-chan/emoji-stealer)
 * [lpath](https://github.com/starwing/lpath)
 * [copas](https://github.com/keplerproject/copas)
 * [luasec](https://github.com/brunoos/luasec)
-* [lua-rapidjson](https://github.com/xpol/lua-rapidjson)
+* [dkjson](http://dkolf.de/src/dkjson-lua.fsl/home)
 * [argparse](https://github.com/mpeterv/argparse)
 
 "Uhhh, why so much more dependencies?" you might think, so let me explain: The previous version depended on [lua-requests](https://github.com/JakobGreen/lua-requests), which has 5 dependencies on it's own, of which two were not even needed for this script. So we're at the same dependency level as before, but this time all dependencies are used. I could remove the argparse dependenciy and write my own short version, but...laziness. ;)

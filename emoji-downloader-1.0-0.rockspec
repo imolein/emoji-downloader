@@ -19,7 +19,7 @@ dependencies = {
   'lua >= 5.3',
   'lpath',
   'copas',
-  'rapidjson',
+  'dkjson',
   'argparse',
   'luasocket',
   'luasec'

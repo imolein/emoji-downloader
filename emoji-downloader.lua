@@ -8,7 +8,7 @@ local limit = require('copas.limit')
 local ltn12 = require('ltn12')
 local argparse = require('argparse')
 local url_parser = require('socket.url').parse
-local json = require('rapidjson').decode
+local json = require('dkjson').decode
 local exists = require('path.fs').exists
 local mkdir = require('path.fs').makedirs
 
