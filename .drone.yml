@@ -7,4 +7,4 @@ pipeline:
     image: imo/luarocks5.3:latest
     commands:
       - luarocks install luacheck
-      - luacheck src/
+      - luacheck emoji-downloader.lua
