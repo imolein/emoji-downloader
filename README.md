@@ -67,14 +67,14 @@ Options:
 If you cloned this repository and installed only the dependencies with luarocks, you can use it the same way as described above, but with .lua file extension at the end:
 
 ```
-lua emoji-downloader.lua "https://example.com"
+lua emoji-downloader.lua domain.tld
 ```
 
 ## Changelog
 
 ### 1.0-0 (2019-02-20)
 
-* reworte most of the stuff
+* rewrote most of the stuff
 * concurrent download of emoji's (default 5 at once)
 * Changed license from WTFPL to Unlicense
 
