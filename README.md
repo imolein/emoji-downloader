@@ -1,5 +1,7 @@
 # emoji-downloader
 
+[![Build Status](https://drone.kokolor.es/api/badges/imo/emoji-downloader/status.svg)](https://drone.kokolor.es/imo/emoji-downloader)
+
 Do you ever thought: "Oh, this instance have nice emoji's, I want them too."? Then just use this script to download them.
 
 Inspired by [emoji-stealer](https://github.com/mirro-chan/emoji-stealer)
