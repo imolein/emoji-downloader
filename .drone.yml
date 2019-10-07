@@ -1,10 +1,10 @@
-workspace:
-  base: /lua
-  path: src/git.kokolor.es/imo/emoji-downloader
+kind: pipeline
+type: docker
+name: default
 
-pipeline:
-  lint:
-    image: imo/luarocks5.3:latest
-    commands:
-      - luarocks install luacheck
-      - luacheck emoji-downloader.lua
+steps:
+- name: lint
+  image: imolein/luarocks:5.3
+  commands:
+    - luarocks install luacheck
+    - luacheck emoji-downloader.lua
